@@ -1,0 +1,35 @@
+body {
+    background-color: #f0f0f0,;
+    cursor: url('images/clock-regular.svg'), auto;
+}
+section {
+    position: relative;
+    color: #212529;
+    max-width: 1200px;
+    margin: auto;
+}
+.fa-expand {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    font-size: 24px;
+    cursor: pointer;
+}
+video{
+    width: 100%;
+    right: 0;
+    top: 0;
+}
+h1 {
+    position: absolute;
+    font-family: "Meow Script", cursive;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.hidden {
+    opacity: 0;
+}
+.showing {
+    opacity: 1;
+}
