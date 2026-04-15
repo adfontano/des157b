@@ -1,11 +1,9 @@
 body {
     background-color: #f0f0f0,;
-    cursor: url('images/clock-regular.svg'), auto;
 }
 section {
     position: relative;
     color: #212529;
-    max-width: 1200px;
     margin: auto;
 }
 .fa-expand {
@@ -15,10 +13,14 @@ section {
     font-size: 24px;
     cursor: pointer;
 }
+.fa-expand:hover {
+    transform: scale(1.1);
+}
 video{
     width: 100%;
     right: 0;
     top: 0;
+    
 }
 h1 {
     position: absolute;
@@ -26,6 +28,9 @@ h1 {
     top: 5%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    transition: all 1s ease-in-out;
 }
 .hidden {
     opacity: 0;
