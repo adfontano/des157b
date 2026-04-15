@@ -31,6 +31,5 @@
             }
         })
 
-        console.log(sepiaValue);
     })
 })();
