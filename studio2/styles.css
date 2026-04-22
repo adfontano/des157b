@@ -34,7 +34,9 @@ section {
     gap: 5px;
     height: 150px;
 }
-
+.block:first-of-type {
+    display: none;
+}
 .block{
     min-height: 30%;
     width: 100%;
@@ -44,10 +46,7 @@ section {
     display: flex;
     justify-content: end;
     align-items: end;
-}
-.planner-text {
-    padding: 10px 20px 10px 10px;
-    margin: 0;
+    padding: 5px;
 }
 p {
     margin: 1px;

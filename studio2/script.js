@@ -15,10 +15,10 @@
     function makeBlocks(data){
         const numBlocks = data.schedule;
 
-        numBlocks.forEach(function(){
+        numBlocks.forEach(function(data){
             const newBlock = blocks.cloneNode(true);
             planner.appendChild(newBlock);
-            newBlock.textContent = data.time; // don't know how to add the text into the div :(
+            newBlock.textContent = data.time; 
         });
         // need to make each block's height relative to the amount of hours it represents
     }
