@@ -4,61 +4,71 @@
       "time": "6:00 AM",
       "activity": "Waking up",
       "feeling": "tired",
-      "hours": 1.3
+      "hours": 1.3,
+      "images": "./images/image-1.PNG"
     },
     {
       "time": "8:20 AM",
       "activity": "Walking to the bus",
       "feeling": "tired",
-      "hours": 0.6
+      "hours": 0.6,
+      "images": "./images/image-2.PNG"
     },
     {
       "time": "9:00 AM",
       "activity": "In screenprinting class",
       "feeling": "confused",
-      "hours": 2.8
+      "hours": 2.8,
+      "images": "./images/image-3.PNG"
     },
     {
       "time": "11:50 AM",
       "activity": "Getting Acai Fresh after class",
       "feeling": "upset",
-      "hours": 1.16
+      "hours": 1.16,
+      "images": "./images/image-4.PNG"
     },
     {
       "time": "1:00 PM",
       "activity": "Working on assignments",
       "feeling": "tired",
-      "hours": 0.5
+      "hours": 0.5,
+      "images": "./images/image-5.PNG"
     },
     {
       "time": "1:30 PM",
       "activity": "Going to Interactive media",
       "feeling": "so excited!",
-      "hours": 3
+      "hours": 3,
+      "images": "./images/image-6.PNG"
     },
     {
       "time": "4:40 PM",
       "activity": "Go to final class",
       "feeling": "bleh",
-      "hours": 2.8
+      "hours": 2.8,
+      "images": "./images/image-7.PNG"
     },
     {
       "time": "7:30 PM",
       "activity": "finally going home",
       "feeling": "bleh",
-      "hours": 1
+      "hours": 1,
+      "images": "./images/image-8.PNG"
     },
     {
       "time": "8:30 PM",
       "activity": "hanging out with friends",
       "feeling": "happy",
-      "hours": 3.5
+      "hours": 3.5,
+      "images": "./images/image-9.PNG"
     },
     {
       "time": "12:00 AM",
       "activity": "time for bed",
       "feeling": "sleepy",
-      "hours": 1
+      "hours": 1,
+      "images": "./images/image-10.PNG"
     }
   ]
 }

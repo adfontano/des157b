@@ -1,58 +1,74 @@
+* {
+    box-sizing: border-box;
+}
 body {
-    background-color: #f4f1f0;
-    
+    background-color: #f4f1f0; 
     font-family: "Gamja Flower", sans-serif;
     color: #343231;
+}
+img {
+    width: 350px;
     
+    display: block;
 }
 
 main {
-    width: 800px;
     margin: auto;
-    margin-top: 25px;
     position: relative;
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
 }
 article {
     display: flex;
-    width: 770px;
-    height: 800px;
+    width: 800px;
+    height: 700px;
     padding: 20px;
     background-image: url(images/planner.png);
     background-repeat: no-repeat;
-    background-size: 800px;
+    background-size: 800px 700px;
     gap: 60px;
-    position: absolute;
-    top: 96%;
-    left: 50%;
-    transform: translate(-50%, 0%);
+    
 }
 section {
     display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    padding: 10px 0px 10px 10px;
+    flex-direction: column; 
+    
     gap: 5px;
-    height: 150px;
+    max-height: 650px;
+    /* height: 150px; */
+}
+#planner {
+    min-width: 350px;
+    padding: 10px 0px 10px 10px;
+}
+#my-day {
+    flex-grow: 1;
+}
+#my-day div {
+    margin-top: 25px;
 }
 .block:first-of-type {
     display: none;
 }
 .block{
-    min-height: 30%;
     width: 100%;
     background-color: #f7efcb;
     border:4px transparent #f7e2a5;
     border-radius: 18px;
-    display: flex;
-    justify-content: end;
-    align-items: end;
     padding: 5px;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
+.block p {
+    margin: 5px;
+}
+
 p {
     margin: 1px;
 }
 h1 {
-    width: fit-content;
     font-size: 40px;
-    margin: 0px auto 10px 35px;
 }
