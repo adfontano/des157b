@@ -35,10 +35,8 @@ article {
 section {
     display: flex;
     flex-direction: column; 
-    
     gap: 5px;
     max-height: 650px;
-    /* height: 150px; */
 }
 #planner {
     min-width: 350px;
@@ -46,6 +44,7 @@ section {
 }
 #my-day {
     flex-grow: 1;
+    justify-content: center;
 }
 #my-day div {
     margin-top: 25px;
