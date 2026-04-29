@@ -157,8 +157,8 @@ img {
     right: 20%;
 }
 #dark-images :last-child{
-    top: 80%;
-    left: 10%;
+    top: 75%;
+    left: 15%;
     z-index: 3;
 }
 #light-images :first-child{
