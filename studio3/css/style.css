@@ -5,14 +5,15 @@
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     background: #ddf4ed;
-    position: relative;
     z-index: 0;
-
+}
+main {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
 }
 img {
     display: block;
@@ -43,4 +44,15 @@ div p {
 }
 .hidden {
     opacity: 0;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    margin: 20px;
+}
+a{
+    color: rgb(93, 10, 120);
+    font: 400 16px "Montserrat", sans-serif;
+    text-decoration: none;
 }
