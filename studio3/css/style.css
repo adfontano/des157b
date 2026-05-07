@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #ddf4ed;
+    position: relative;
+    z-index: 0;
+
+}
+img {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+div {
+    color: rgb(93, 10, 120);
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+    z-index: 3;
+}
+div h1 {
+    font: 400 96px "Pixelify Sans", sans-serif;
+    margin-bottom: 15px;
+}
+div p {
+    font: 400 16px "Montserrat", sans-serif;
+}
+.showing {
+    opacity: 1;
+}
+.hidden {
+    opacity: 0;
+}
