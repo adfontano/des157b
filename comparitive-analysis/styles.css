@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+}
+
+img {
+    display: block;
+    height: auto;
+    width: 50%;
+}
+div {
+    display: flex;
+}
+body {
+    background-color: #FFFEEC;
+    color: #647FC6;
+    transition: all 2s;
+    font-family: "Sen", sans-serif;
+    font-weight: 400;
+    
+} 
+article {
+    max-width: 700px;
+    margin: auto;
+}
+section {
+    margin: 40px;
+}
+h1{
+    font-family: "Roboto Mono", monospace;
+    font-size: 54px;
+    margin: 0;
+    margin-top: 20px;
+    font-weight: 500;
+}
+a {
+    
+    text-decoration: none;
+    font-size: 26px;
+    font-weight: 400;
+}
