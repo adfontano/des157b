@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrow Functions</title>
+    <style>
+        html {
+            background-color: #efefef;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #333;
+            line-height: 1.4em;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Change this H1</h1>
+
+    <p>The function changes the color of the h1 based on the color you pass into the function.</p>
+
+    <h2>Named Function</h2>
+    <code>
+        <pre>
+            function changeColor(color){
+                document.querySelector('h1').style.color = `${color}`;
+            }
+            changeColor('green');
+        </pre>
+    </code>
+
+    <h2>Function Expression</h2>
+    <code>
+        <pre>
+            const changeColor = function(color){
+                document.querySelector('h1').style.color = `${color}`;
+            }
+            changeColor('green');
+        </pre>
+    </code>
+
+    <h2>Arrow Function</h2>
+    <code>
+        <pre>
+            const changeColor = (color) => document.querySelector('h1').style.color = `${color}`;
+            changeColor('green');
+        </pre>
+    </code>
+
+    <footer> Aidan Fontano </footer>
+
+</body>
+</html>
