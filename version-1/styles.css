@@ -1,0 +1,45 @@
+* {
+    box-sizing: border-box;
+}
+img {
+    max-width: 100%;
+    display: block;
+    height: auto;
+}
+body {
+    font-family: "Barlow Condensed", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+main {
+    display: flex;
+    height: 100vh;
+    
+}
+#textbox {
+    background-color: #070214;
+    width: 30%;
+    padding: 32px;
+}
+p {
+    font-size: 18px;
+    color: #f5f3ed;
+}
+#environment {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: left;
+    width: 100%;
+}
+.circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 3px solid #faf9f7;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+}
+.circle:first-of-type { 
+    display: none;
+}
