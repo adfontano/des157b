@@ -20,11 +20,14 @@ main {
     background-color: #070214;
     width: 30%;
     padding: 32px;
+    overflow: scroll;
 }
 p {
     font-size: 18px;
     color: #f5f3ed;
+    font-style: italic;
 }
+
 #environment {
     background-size: cover;
     background-repeat: no-repeat;
@@ -35,11 +38,45 @@ p {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    border: 3px solid #faf9f7;
+    border: 2px solid #faf9f7;
     position: absolute;
     top: 50%;
     right: 50%;
+    transition: all .25s ease-in-out;
+}
+.circle:hover {
+    border-width: 4px;
+    cursor: pointer;
+    
+}
+.disabled {
+    opacity: 0.5;
+}
+.disabled:hover {
+    color: #f5f3ed;
 }
 .circle:first-of-type { 
     display: none;
+}
+button {
+    all: unset;
+    font-size: 18px;
+    color: #f5f3ed;
+    font-weight: 400;
+}
+button:hover {
+    color: #fc7323;
+}
+ul {
+    list-style-type: '>   ';
+}
+
+li {
+    font-size: 18px;
+    color: #f5f3ed;
+    font-weight: 400;
+}
+li:hover {
+    color: #fc7323;
+    cursor: pointer;
 }
