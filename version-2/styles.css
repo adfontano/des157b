@@ -7,7 +7,7 @@ img {
     height: auto;
 }
 body {
-    font-family: "Barlow Condensed", sans-serif;
+    font-family: "Instrument Serif", serif;
     font-weight: 200;
     font-style: normal;
 }
@@ -25,7 +25,7 @@ main {
 p {
     font-size: 18px;
     color: #f5f3ed;
-    font-style: italic;
+    
 }
 
 #environment {
@@ -62,7 +62,7 @@ button {
     all: unset;
     font-size: 18px;
     color: #f5f3ed;
-    font-weight: 400;
+    
 }
 button:hover {
     color: #fc7323;
@@ -74,7 +74,7 @@ ul {
 li {
     font-size: 18px;
     color: #f5f3ed;
-    font-weight: 400;
+    
 }
 li:hover {
     color: #fc7323;
