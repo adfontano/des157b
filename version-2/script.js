@@ -96,8 +96,8 @@
                     '89%'
                 ],
                 objectLeft: [
-                    '55%',
-                    '21%'
+                    '50%',
+                    '19%'
                 ],
                 objectDialogue: [
                     'Helps your reused water to become drinkable. The water supply is so tight these days you may run out if you aren’t careful.',
@@ -133,7 +133,7 @@
                     '43%'
                 ],
                 objectLeft: [
-                    '57%'
+                    '52%'
                 ],
                 objectDialogue: [
                     'Gotta stay cool with how hot it is at night.'
@@ -178,6 +178,7 @@
                 // whichAnswers = Object.values(dialogueAnswers)[i-1];
 
                 if (sceneInfo.dialogueChoice[i] !== false) { // if there are dialogue questions for this object display them
+                    if (isTyping) return;
                     const findChoices = sceneInfo.dialogueChoice[i]
                     const findAnswers = sceneInfo.choiceAnswers[i]
 
@@ -208,6 +209,7 @@
 
                             if (objectsClicked >= sceneInfo.objects && !optionsRemianing) { //once all objects have been viewed add final text and progression button
                                 setTimeout(async () => {
+                                    if (isTyping) return;
                                     await typing(`${sceneInfo.progressionDialogue}`);
                                     makeProgressionButton(sceneInfo.progressionOption);
                                     document.querySelector('.progression-button').addEventListener('click', () => {
@@ -227,7 +229,18 @@
                 }
                 newCircles.classList.add('disabled');
 
-
+                if (sceneInfo.dialogueChoice[i] == false) {
+                    if (objectsClicked >= sceneInfo.objects) { 
+                        setTimeout(async () => {
+                            if (isTyping) return;
+                            await typing(`${sceneInfo.progressionDialogue}`);
+                            makeProgressionButton(sceneInfo.progressionOption);
+                            document.querySelector('.progression-button').addEventListener('click', () => {
+                                loadNextScene();
+                            }, { once: true });
+                        }, 1000);
+                    }
+                }
 
 
 
