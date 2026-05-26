@@ -3,7 +3,7 @@
     console.log('reading js');
     let objectsClicked = 0;
     let isTyping = false;
-    let currentScene = 1;
+    let currentScene = 0;
 
     let whichQuestions = '';
     let whichAnswers = '';
