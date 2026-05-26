@@ -3,8 +3,8 @@
     console.log('reading js');
     let objectsClicked = 0;
     let isTyping = false;
-    let currentScene = 0;
-    const ul = document.createElement('ul'); // create a ul for the questions to go in
+    let currentScene = 1;
+
     let whichQuestions = '';
     let whichAnswers = '';
 
@@ -130,10 +130,10 @@
                 ],
                 objects: 1,
                 objectTop: [
-                    '50%'
+                    '43%'
                 ],
                 objectLeft: [
-                    '55%'
+                    '57%'
                 ],
                 objectDialogue: [
                     'Gotta stay cool with how hot it is at night.'
@@ -159,7 +159,7 @@
 
 
     async function loadScene(index) {
-
+        let optionsRemianing = false;
         const sceneInfo = scene.location[index];
         background.style.backgroundImage = sceneInfo.environment;
         for (let i = 0; i < sceneInfo.objects; i++) {
@@ -181,21 +181,43 @@
                     const findChoices = sceneInfo.dialogueChoice[i]
                     const findAnswers = sceneInfo.choiceAnswers[i]
 
+                    const ul = document.createElement('ul'); // create a ul for the questions to go in
                     findChoices.forEach(question => {    // for each question in the array put it in an li in the ul
-                        createLi(question);
+                        // createLi(question);
+                        const li = document.createElement('li');
+                        li.textContent = question;
+                        ul.appendChild(li);
                     });
+
                     textBox.appendChild(ul);
-                    const allOptions = document.querySelectorAll('li');
+                    const allOptions = document.querySelectorAll('li:not(.disabled)');
+
+                    console.log(optionsRemianing)
 
                     allOptions.forEach((option, index) => {
                         option.addEventListener('click', async () => { //gets the string from whichAnswers that corresponds to index
+                            if (isTyping) return;
                             option.className = 'disabled';
+
                             await typing(`${findAnswers[index]}`);
 
                             //figure out how to make the dialogue options reappear after a dialogue response it added, also figure out how to make it so the scene won't progress when you still have dialogue options up (maybe add continue button?)
 
+                            const activeOptionExists = document.querySelector('li:not(.disabled)'); //recheck for disabled li's
+                            optionsRemianing = !!activeOptionExists; //if there are still elements on the page that are li's without the disabled class it is true
 
+                            if (objectsClicked >= sceneInfo.objects && !optionsRemianing) { //once all objects have been viewed add final text and progression button
+                                setTimeout(async () => {
+                                    await typing(`${sceneInfo.progressionDialogue}`);
+                                    makeProgressionButton(sceneInfo.progressionOption);
+                                    document.querySelector('.progression-button').addEventListener('click', () => {
+                                        loadNextScene();
+                                    }, { once: true });
+                                }, 1000);
+                            }
                         }, { once: true });
+
+
                     });
 
                 }
@@ -205,15 +227,9 @@
                 }
                 newCircles.classList.add('disabled');
 
-                if (objectsClicked >= sceneInfo.objects) { //once all objects have been viewed add final text and progression button
-                    setTimeout(async () => {
-                        await typing(`${sceneInfo.progressionDialogue}`);
-                        makeProgressionButton(sceneInfo.progressionOption);
-                        document.querySelector('.progression-button').addEventListener('click', () => {
-                            loadNextScene();
-                        }, { once: true });
-                    }, 1000);
-                }
+
+
+
 
 
 
@@ -230,24 +246,28 @@
         await typing(`${sceneInfo.startDialogue}`);
 
         if (currentScene === 0) {
-                await typing(`${sceneInfo.instructions}`);
-            }
+            await typing(`${sceneInfo.instructions}`);
+        }
 
 
         // ----- if there additional questions to start the scene ----
         if (sceneInfo.startChoice[0] !== false) {
             const findStartChoices = sceneInfo.startChoice;
             const findStartAnswers = sceneInfo.startAnswers;
-
+            const ul = document.createElement('ul'); // create a ul for the questions to go in
             findStartChoices.forEach((choice) => {
-                createLi(choice);
+                // createLi(choice);
+                const li = document.createElement('li');
+                li.textContent = choice;
+                ul.appendChild(li);
             });
 
             textBox.appendChild(ul);
-            const allOptions = document.querySelectorAll('li');
+            const allOptions = document.querySelectorAll('li:not(.disabled)');
 
             allOptions.forEach((option, index) => {
                 option.addEventListener('click', async () => { //gets the string from whichAnswers that corresponds to index
+                    if (isTyping) return;
                     option.className = 'disabled';
                     await typing(`${findStartAnswers[index]}`);
 
@@ -258,47 +278,48 @@
         }
     }
 
-        function loadNextScene() {
-            currentScene++;
-            textBox.innerHTML = '';
-            objectsClicked = 0;
-            document.querySelectorAll('.circle-clone').forEach(clone => clone.remove());
-            loadScene(currentScene);
-        }
-
-
+    function loadNextScene() {
+        currentScene++;
+        textBox.innerHTML = '';
+        objectsClicked = 0;
+        document.querySelectorAll('.circle-clone').forEach(clone => clone.remove());
         loadScene(currentScene);
+    }
 
 
-        function makeProgressionButton(buttonText) {
-            const button = document.createElement('button');
-            button.className = 'progression-button';
-            button.textContent = `${buttonText}`;
+    loadScene(currentScene);
 
-            textBox.appendChild(button);
+
+    function makeProgressionButton(buttonText) {
+        const button = document.createElement('button');
+        button.className = 'progression-button';
+        button.textContent = `${buttonText}`;
+
+        textBox.appendChild(button);
+    }
+
+    // function createLi(text) {
+
+    //     const li = document.createElement('li');
+    //     li.textContent = text;
+
+    // }
+
+    async function typing(text) {
+        if (isTyping) return; //prevent the typing function from running more than once at a time
+        isTyping = true;
+
+        const p = document.createElement('p'); //add a paragraph to put the text into
+        textBox.appendChild(p);
+
+        const speed = 30;
+
+        for (let i = 0; i < text.length; i++) {
+            p.textContent += text.charAt(i);
+            await wait(speed);
         }
 
-        function createLi(text) {
-            const li = document.createElement('li');
-            li.textContent = text;
-            ul.appendChild(li);
-        }
+        isTyping = false; //once all characters have been added turn isTyping to false
+    }
 
-        async function typing(text) {
-            if (isTyping) return; //prevent the typing function from running more than once at a time
-            isTyping = true;
-
-            const p = document.createElement('p'); //add a paragraph to put the text into
-            textBox.appendChild(p);
-
-            const speed = 30;
-
-            for (let i = 0; i < text.length; i++) {
-                p.textContent += text.charAt(i);
-                await wait(speed);
-            }
-
-            isTyping = false; //once all characters have been added turn isTyping to false
-        }
-
-    })();
+})();
