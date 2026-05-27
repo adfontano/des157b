@@ -3,7 +3,7 @@
     console.log('reading js');
     let objectsClicked = 0;
     let isTyping = false;
-    let currentScene = 1;
+    let currentScene = 0;
     let enableCircleClicks = true;
     let allOptions;
 
@@ -15,6 +15,12 @@
     const textBox = document.querySelector('#textbox');
     const cirlce = document.querySelector('.circle');
     const progressionButton = document.querySelector('.progression-button');
+    const startScreen = document.querySelector('#start-screen');
+    const startButton = document.querySelector('#start-button');
+    const main = document.querySelector('main');
+    const bgMusic = new Audio('audio/bgMusic2.m4a');
+    const typeSound = new Audio('audio/fastTyping.mp3');
+    typeSound.volume = 0.7;
 
     const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms)); // helps to create a pause between characters appearing in the typing function
 
@@ -101,8 +107,8 @@
                     '89%'
                 ],
                 objectLeft: [
-                    '50%',
-                    '19%'
+                    '62%',
+                    '24%'
                 ],
                 objectDialogue: [
                     'The water filter: Helps your reused water to become drinkable. The water supply is so tight these days you may run out if you aren’t careful.',
@@ -137,10 +143,10 @@
                 ],
                 objects: 1,
                 objectTop: [
-                    '43%'
+                    '45%'
                 ],
                 objectLeft: [
-                    '52%'
+                    '65%'
                 ],
                 objectDialogue: [
                     'A battery powered fan: Gotta stay cool with how hot it is at night.'
@@ -199,17 +205,20 @@
                 objectsClicked++;
 
                 // ------------------------------------ Progression dialogue for scenes with no dialogue options -----------------------------
-                if (sceneInfo.dialogueChoice[i] == false) {
-                    if (objectsClicked >= sceneInfo.objects) {
-                        if (isTyping) return;
-                        await typing(`${sceneInfo.progressionDialogue}`);
-                        makeProgressionButton(sceneInfo.progressionOption);
-                        document.querySelector('.progression-button').addEventListener('click', () => {
-                            loadNextScene();
-                        }, { once: true });
-                    };
+                setTimeout(async() => {
+                    if (sceneInfo.dialogueChoice[i] == false) {
+                        if (objectsClicked >= sceneInfo.objects) {
+                            if (isTyping) return;
+                            await typing(`${sceneInfo.progressionDialogue}`);
+                            makeProgressionButton(sceneInfo.progressionOption);
+                            document.querySelector('.progression-button').addEventListener('click', () => {
+                                loadNextScene();
+                            }, { once: true });
+                        };
 
-                }
+                    }
+                }, (500))
+
 
 
             });
@@ -245,8 +254,20 @@
         loadScene(currentScene);
     }
 
+    function startGame(){
+        main.style.display = 'none';
+        startScreen.style.display = 'block';
 
-    loadScene(currentScene);
+        startButton.addEventListener('click', ()=>{
+            main.style.display = 'block';
+            startScreen.style.display = 'none';
+            loadScene(currentScene);
+            //playMusic();
+        });
+    }
+
+    startGame();
+    
 
     // ----------------------------------------------------- creates dialogue choices ------------------------------------
     function makeChoices(choice, answer, id, sceneInfo) {
@@ -292,25 +313,24 @@
 
                     //--------------------------------- Add progression dialogue ---------------------------------------
                     if (sceneInfo !== false) {
-                        if (objectsClicked >= sceneInfo.objects && !optionsRemaining) {
-                            if (isTyping) return;
-                            await typing(`${sceneInfo.progressionDialogue}`);
-                            makeProgressionButton(sceneInfo.progressionOption);
-                            document.querySelector('.progression-button').addEventListener('click', () => {
-                                loadNextScene();
-                            }, { once: true });
+                        setTimeout(async() => {
+                            if (objectsClicked >= sceneInfo.objects && !optionsRemaining) {
+                                if (isTyping) return;
+                                await typing(`${sceneInfo.progressionDialogue}`);
+                                makeProgressionButton(sceneInfo.progressionOption);
+                                document.querySelector('.progression-button').addEventListener('click', () => {
+                                    loadNextScene();
+                                }, { once: true });
+                            }
+                        }, (500))
 
-                        }
                     }
 
                 } else {
                     if (ul.className === 'disabled') return;
-                    await typing(`${findAnswers[index]}`);
-
                     option.className = 'disabled';
+                    await typing(`${findAnswers[index]}`);
                     optionsRemaining = true;
-
-
                 }
 
 
@@ -327,6 +347,10 @@
         button.textContent = `${buttonText}`;
 
         textBox.appendChild(button);
+        textBox.scrollTo({
+            top: textBox.scrollHeight,
+            behavior: 'smooth'
+        });
     }
 
 
@@ -336,13 +360,18 @@
 
         const p = document.createElement('p'); //add a paragraph to put the text into
         textBox.appendChild(p);
-
         const speed = 30;
+
+        typeSound.currentTime = 0; 
 
         for (let i = 0; i < text.length; i++) {
             p.textContent += text.charAt(i);
+            //typeSound.play();
             await wait(speed);
         }
+
+        typeSound.pause();
+        typeSound.currentTime = 0; 
 
         textBox.scrollTo({
             top: textBox.scrollHeight,
@@ -350,6 +379,11 @@
         });
 
         isTyping = false; //once all characters have been added turn isTyping to false
+    }
+
+    function playMusic(){
+        bgMusic.loop = true;
+        bgMusic.play();
     }
 
 
