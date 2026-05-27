@@ -3,10 +3,13 @@
     console.log('reading js');
     let objectsClicked = 0;
     let isTyping = false;
-    let currentScene = 0;
+    let currentScene = 1;
+    let enableCircleClicks = true;
+    let allOptions;
 
-    let whichQuestions = '';
-    let whichAnswers = '';
+
+    let activeOptionExists;
+    let optionsRemaining = false;
 
     const background = document.querySelector('#environment');
     const textBox = document.querySelector('#textbox');
@@ -54,7 +57,7 @@
                 startAnswers: [
                     false
                 ],
-                instructions: '*click on anything highlighted with a white circle to progress*',
+                instructions: '*click on anything highlighted with a orange circle to progress*',
                 objects: 2,
                 objectTop: [
                     '15%',
@@ -65,8 +68,8 @@
                     '20%'
                 ],
                 objectDialogue: [
-                    'The air quality is poor, the regular wildfires have only made it worse',
-                    'Why keep a pretty lawn when you barely have enough water to shower?'
+                    'The cloudy sky: The air quality is poor, the regular wildfires have only made it worse',
+                    'The dead landscaping: Why keep a pretty lawn when you barely have enough water to shower?'
                 ],
                 dialogueChoice: [
                     false,
@@ -82,13 +85,15 @@
             {
                 environment: "url(images/kitchen.JPG)",
                 startDialogue: 'You should probably make something to eat, what are you thinking?',
+                startId: 'lunch',
+                id: ['water', 'mug'],
                 startChoice: [
                     'pizza',
                     'coffee'
                 ],
                 startAnswers: [
-                    'No cheese bruh', //fix later
-                    'No coffee either'
+                    "Hm, we haven't seen any cheese in the store with all the dairy shortages", //fix later
+                    "Maybe if you were rich, coffee bean prices have skyrocketed..."
                 ],
                 objects: 2,
                 objectTop: [
@@ -100,8 +105,8 @@
                     '19%'
                 ],
                 objectDialogue: [
-                    'Helps your reused water to become drinkable. The water supply is so tight these days you may run out if you aren’t careful.',
-                    'Filled with oatmilk, a morning delicacy.'
+                    'The water filter: Helps your reused water to become drinkable. The water supply is so tight these days you may run out if you aren’t careful.',
+                    'A half empty mug: Filled with oatmilk, a morning delicacy.'
                 ],
                 dialogueChoice: [
                     dialogueQuestions.filter,
@@ -122,6 +127,8 @@
             {
                 environment: "url(images/bedroom.JPG)",
                 startDialogue: 'This should be a good spot to wait out the outage',
+                startId: 'waiting',
+                id: ['fan'],
                 startChoice: [
                     'Is this a regular occurance?'
                 ],
@@ -136,7 +143,7 @@
                     '52%'
                 ],
                 objectDialogue: [
-                    'Gotta stay cool with how hot it is at night.'
+                    'A battery powered fan: Gotta stay cool with how hot it is at night.'
                 ],
                 dialogueChoice: [
                     dialogueQuestions.fan
@@ -159,96 +166,56 @@
 
 
     async function loadScene(index) {
-        let optionsRemianing = false;
+
+        //--------------------------------------- gets scene data and sets the bg --------------------------------
         const sceneInfo = scene.location[index];
         background.style.backgroundImage = sceneInfo.environment;
+
+        //---------------------------------------- generates the interactive circles based on the scene data -----------------
         for (let i = 0; i < sceneInfo.objects; i++) {
             const newCircles = cirlce.cloneNode();
             newCircles.classList.add('circle-clone');
 
+            // ----------------------------------------- listens for a circle to be clicked on ----------------------------------------------   
             newCircles.addEventListener('click', async () => {
+                console.log(enableCircleClicks);
                 if (isTyping) return; // no clicking on things while there is already dialogue being added
-                await typing(`${sceneInfo.objectDialogue[i]}`);
+                if (!enableCircleClicks) return; // if there is current dialogue options active, no clicking
+
+                await typing(`${sceneInfo.objectDialogue[i]}`); //once an object is clicked display the dialogue attached to it
 
 
-                // console.log(findChoices[1]);
-                console.log(sceneInfo.dialogueChoice[i]);
-
-                // whichQuestions = Object.values(dialogueQuestions)[i-1]; //gets the strings from the correct array inside the dialogue questions object
-                // whichAnswers = Object.values(dialogueAnswers)[i-1];
-
-                if (sceneInfo.dialogueChoice[i] !== false) { // if there are dialogue questions for this object display them
+                //---------------------------------- if there are dialogue questions for this object display them ---------------------------
+                if (sceneInfo.dialogueChoice[i] !== false) {
                     if (isTyping) return;
-                    const findChoices = sceneInfo.dialogueChoice[i]
-                    const findAnswers = sceneInfo.choiceAnswers[i]
-
-                    const ul = document.createElement('ul'); // create a ul for the questions to go in
-                    findChoices.forEach(question => {    // for each question in the array put it in an li in the ul
-                        // createLi(question);
-                        const li = document.createElement('li');
-                        li.textContent = question;
-                        ul.appendChild(li);
-                    });
-
-                    textBox.appendChild(ul);
-                    const allOptions = document.querySelectorAll('li:not(.disabled)');
-
-                    console.log(optionsRemianing)
-
-                    allOptions.forEach((option, index) => {
-                        option.addEventListener('click', async () => { //gets the string from whichAnswers that corresponds to index
-                            if (isTyping) return;
-                            option.className = 'disabled';
-
-                            await typing(`${findAnswers[index]}`);
-
-                            //figure out how to make the dialogue options reappear after a dialogue response it added, also figure out how to make it so the scene won't progress when you still have dialogue options up (maybe add continue button?)
-
-                            const activeOptionExists = document.querySelector('li:not(.disabled)'); //recheck for disabled li's
-                            optionsRemianing = !!activeOptionExists; //if there are still elements on the page that are li's without the disabled class it is true
-
-                            if (objectsClicked >= sceneInfo.objects && !optionsRemianing) { //once all objects have been viewed add final text and progression button
-                                setTimeout(async () => {
-                                    if (isTyping) return;
-                                    await typing(`${sceneInfo.progressionDialogue}`);
-                                    makeProgressionButton(sceneInfo.progressionOption);
-                                    document.querySelector('.progression-button').addEventListener('click', () => {
-                                        loadNextScene();
-                                    }, { once: true });
-                                }, 1000);
-                            }
-                        }, { once: true });
-
-
-                    });
+                    enableCircleClicks = false;
+                    makeChoices(sceneInfo.dialogueChoice[i], sceneInfo.choiceAnswers[i], sceneInfo.id[i], sceneInfo);
 
                 }
 
-                if (!newCircles.classList.contains('disabled')) {
-                    objectsClicked++;
-                }
+
+                // ---------------------------------- Once an item has been clicked on dull the circle and increase counter ------------------
                 newCircles.classList.add('disabled');
+                objectsClicked++;
 
+                // ------------------------------------ Progression dialogue for scenes with no dialogue options -----------------------------
                 if (sceneInfo.dialogueChoice[i] == false) {
-                    if (objectsClicked >= sceneInfo.objects) { 
-                        setTimeout(async () => {
-                            if (isTyping) return;
-                            await typing(`${sceneInfo.progressionDialogue}`);
-                            makeProgressionButton(sceneInfo.progressionOption);
-                            document.querySelector('.progression-button').addEventListener('click', () => {
-                                loadNextScene();
-                            }, { once: true });
-                        }, 1000);
-                    }
+                    if (objectsClicked >= sceneInfo.objects) {
+                        if (isTyping) return;
+                        await typing(`${sceneInfo.progressionDialogue}`);
+                        makeProgressionButton(sceneInfo.progressionOption);
+                        document.querySelector('.progression-button').addEventListener('click', () => {
+                            loadNextScene();
+                        }, { once: true });
+                    };
+
                 }
-
-
-
 
 
             });
 
 
+            // ----------------------------------------- display the circles ---------------------------------------
             background.appendChild(newCircles)
             newCircles.style.top = sceneInfo.objectTop[i];
             newCircles.style.left = sceneInfo.objectLeft[i];
@@ -256,38 +223,17 @@
 
         }
 
+        // --------------------------------------------- Starting dialogue plays -------------------------------------------
         await typing(`${sceneInfo.startDialogue}`);
 
         if (currentScene === 0) {
             await typing(`${sceneInfo.instructions}`);
         }
 
-
-        // ----- if there additional questions to start the scene ----
+        // ---------------------------- if there additional questions to start the scene ---------------------------------
         if (sceneInfo.startChoice[0] !== false) {
-            const findStartChoices = sceneInfo.startChoice;
-            const findStartAnswers = sceneInfo.startAnswers;
-            const ul = document.createElement('ul'); // create a ul for the questions to go in
-            findStartChoices.forEach((choice) => {
-                // createLi(choice);
-                const li = document.createElement('li');
-                li.textContent = choice;
-                ul.appendChild(li);
-            });
-
-            textBox.appendChild(ul);
-            const allOptions = document.querySelectorAll('li:not(.disabled)');
-
-            allOptions.forEach((option, index) => {
-                option.addEventListener('click', async () => { //gets the string from whichAnswers that corresponds to index
-                    if (isTyping) return;
-                    option.className = 'disabled';
-                    await typing(`${findStartAnswers[index]}`);
-
-
-                }, { once: true });
-            });
-
+            enableCircleClicks = false;
+            makeChoices(sceneInfo.startChoice, sceneInfo.startAnswers, sceneInfo.startId, false);
         }
     }
 
@@ -302,6 +248,78 @@
 
     loadScene(currentScene);
 
+    // ----------------------------------------------------- creates dialogue choices ------------------------------------
+    function makeChoices(choice, answer, id, sceneInfo) {
+        const findChoices = choice;
+        const findAnswers = answer;
+        const continueButton = document.createElement('li');
+        const ul = document.createElement('ul');
+
+        optionsRemaining = true;
+        ul.setAttribute('id', id)
+
+        // -------------------------------------------------- puts each dialogue choice into a list item ---------------------------
+        findChoices.forEach((choice) => {
+            // createLi(choice);
+            const li = document.createElement('li');
+            li.textContent = choice;
+            ul.appendChild(li);
+        });
+
+        // -------------------------------------------------- creates a continue button and appends all li's to a ul ----------------
+        continueButton.textContent = 'continue'
+        continueButton.className = 'continue';
+        ul.appendChild(continueButton);
+        textBox.appendChild(ul);
+
+        // -------------------------------------------------- Select all choices and output their responses --------------------------
+        allOptions = document.querySelectorAll(`#${id} li:not(.disabled)`);
+
+        allOptions.forEach((option, index) => {
+            option.addEventListener('click', async () => {
+                if (isTyping) return;
+
+                if (option.classList.contains('continue')) {
+
+                    option.className = 'disabled';
+                    await typing('continuing (placeholder text)');
+                    allOptions.forEach(option => option.className = 'disabled');
+                    ul.className = 'disabled';
+                    optionsRemaining = false;
+                    enableCircleClicks = true;
+
+                    console.log(enableCircleClicks);
+
+                    //--------------------------------- Add progression dialogue ---------------------------------------
+                    if (sceneInfo !== false) {
+                        if (objectsClicked >= sceneInfo.objects && !optionsRemaining) {
+                            if (isTyping) return;
+                            await typing(`${sceneInfo.progressionDialogue}`);
+                            makeProgressionButton(sceneInfo.progressionOption);
+                            document.querySelector('.progression-button').addEventListener('click', () => {
+                                loadNextScene();
+                            }, { once: true });
+
+                        }
+                    }
+
+                } else {
+                    if (ul.className === 'disabled') return;
+                    await typing(`${findAnswers[index]}`);
+
+                    option.className = 'disabled';
+                    optionsRemaining = true;
+
+
+                }
+
+
+            }, { once: true });
+
+        });
+
+    }
+
 
     function makeProgressionButton(buttonText) {
         const button = document.createElement('button');
@@ -311,12 +329,6 @@
         textBox.appendChild(button);
     }
 
-    // function createLi(text) {
-
-    //     const li = document.createElement('li');
-    //     li.textContent = text;
-
-    // }
 
     async function typing(text) {
         if (isTyping) return; //prevent the typing function from running more than once at a time
@@ -332,7 +344,15 @@
             await wait(speed);
         }
 
+        textBox.scrollTo({
+            top: textBox.scrollHeight,
+            behavior: 'smooth'
+        });
+
         isTyping = false; //once all characters have been added turn isTyping to false
     }
+
+
+
 
 })();

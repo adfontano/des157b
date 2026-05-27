@@ -38,7 +38,7 @@ p {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    border: 2px solid #faf9f7;
+    border: 2px solid #fc7323;
     position: absolute;
     top: 50%;
     right: 50%;
@@ -50,10 +50,11 @@ p {
     
 }
 .disabled {
-    opacity: 0.5;
+    opacity: 0.4;
 }
 .disabled:hover {
-    color: #f5f3ed;
+    color: #fc7323;
+    cursor: default;
 }
 .circle:first-of-type { 
     display: none;
@@ -61,11 +62,12 @@ p {
 button {
     all: unset;
     font-size: 18px;
-    color: #f5f3ed;
+    color: #85A1FF;
     
 }
 button:hover {
-    color: #fc7323;
+    color: #3F6BF9;
+    cursor: pointer;
 }
 ul {
     list-style-type: '>   ';
@@ -73,10 +75,10 @@ ul {
 
 li {
     font-size: 18px;
-    color: #f5f3ed;
+    color: #fc7323;
     
 }
 li:hover {
-    color: #fc7323;
+    color: #C55514;
     cursor: pointer;
 }
