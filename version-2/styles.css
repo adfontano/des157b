@@ -17,7 +17,8 @@ main {
     position: relative;
     height: 100vh;
     overflow: hidden;
-    max-width: 2000px;
+    width: 100vw;
+    max-width: 1600px;
     
 }
 #textbox {
@@ -35,12 +36,11 @@ main {
     right: 0;
 }
 #environment {
-    place-items: center;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: left;
     width: 100%;
-    max-width: 1250px;
+    /* max-width: 1250px; */
     margin: 0;
     aspect-ratio: 8/5;
     max-height: calc(100vw * (8 / 5)); 
@@ -109,12 +109,69 @@ li:hover {
     color: #C55514;
     cursor: pointer;
 }
+#mute {
+    padding: 16px;
+    position: absolute;
+    color: #85A1FF;
+    top: 1%;
+    left: 1%;
+    font-size: 20px;
+}
 #start-screen {
-    width: 50%;
+    width: 100vw;
+    height: 100vh;
     margin: 0 auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url(images/start-screen.jpg);
+    position: relative;
+}
+#start-screen section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 64px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 h1 {
     margin: auto;
-    font-size: 128px;
+    font-size: 120px;
+    color: #f5f3ed;
+    text-align: center;
+}
+#start-button {
+    color: #f5f3ed;
+    font-size: 24px;
+    text-align: center;
+    border: 3px solid #f5f3ed;
+    padding: 8px 32px 8px 32px;
+    border-radius: 16px;
+    transition: all 0.25s ease-in-out;
+}
+#start-button:hover {
+    background-color: #f5f3ed;
+    color: #fc7323;
+}
+
+#info {
+    padding: 8px 16px 10px 16px;
+    color: #f5f3ed;
+    border: 2px solid #f5f3ed;
+    border-radius: 32px;
+    transition: all 0.25s ease-in-out;
+    font-size: 18px;
+    position: absolute;
+    top: 2%;
+    right: 2%;
+}
+#info:hover{
+    background-color: #f5f3ed;
+    color: #fc7323;
+}
+.instructions, .object-title {
     color: #fc7323;
 }

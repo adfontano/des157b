@@ -3,9 +3,11 @@
     console.log('reading js');
     let objectsClicked = 0;
     let isTyping = false;
+    let skipTyping = false;
     let currentScene = 0;
     let enableCircleClicks = true;
     let allOptions;
+    let activeMusic = null;
 
 
     let activeOptionExists;
@@ -18,7 +20,10 @@
     const startScreen = document.querySelector('#start-screen');
     const startButton = document.querySelector('#start-button');
     const main = document.querySelector('main');
+    const muteButton = document.querySelector('#mute')
+    let allowMusic = true;
     const bgMusic = new Audio('audio/bgMusic2.m4a');
+    const startMusic = new Audio('audio/bgMusic1.m4a')
     const typeSound = new Audio('audio/fastTyping.mp3');
     typeSound.volume = 0.7;
 
@@ -63,7 +68,7 @@
                 startAnswers: [
                     false
                 ],
-                instructions: '*click on anything highlighted with a orange circle to progress*',
+                instructions: '<span class = "instructions">*click on anything highlighted with a orange circle to progress*</span>',
                 objects: 2,
                 objectTop: [
                     '15%',
@@ -74,8 +79,8 @@
                     '20%'
                 ],
                 objectDialogue: [
-                    'The cloudy sky: The air quality is poor, the regular wildfires have only made it worse',
-                    'The dead landscaping: Why keep a pretty lawn when you barely have enough water to shower?'
+                    '<span class = "object-title">The cloudy sky: </span>The air quality is poor, the regular wildfires have only made it worse',
+                    '<span class = "object-title">The dead landscaping: </span>Why keep a pretty lawn when you barely have enough water to shower?'
                 ],
                 dialogueChoice: [
                     false,
@@ -111,8 +116,8 @@
                     '24%'
                 ],
                 objectDialogue: [
-                    'The water filter: Helps your reused water to become drinkable. The water supply is so tight these days you may run out if you aren’t careful.',
-                    'A half empty mug: Filled with oatmilk, a morning delicacy.'
+                    '<span class="object-title>"The water filter: </span>Helps your reused water to become drinkable. The water supply is so tight these days you may run out if you aren’t careful.',
+                    '<span class="object-title">A half empty mug: </span>Filled with oatmilk, a morning delicacy.'
                 ],
                 dialogueChoice: [
                     dialogueQuestions.filter,
@@ -149,7 +154,7 @@
                     '65%'
                 ],
                 objectDialogue: [
-                    'A battery powered fan: Gotta stay cool with how hot it is at night.'
+                    '<span class = "object-title">A battery powered fan: </span> Gotta stay cool with how hot it is at night.'
                 ],
                 dialogueChoice: [
                     dialogueQuestions.fan
@@ -205,7 +210,7 @@
                 objectsClicked++;
 
                 // ------------------------------------ Progression dialogue for scenes with no dialogue options -----------------------------
-                setTimeout(async() => {
+                setTimeout(async () => {
                     if (sceneInfo.dialogueChoice[i] == false) {
                         if (objectsClicked >= sceneInfo.objects) {
                             if (isTyping) return;
@@ -236,6 +241,7 @@
         await typing(`${sceneInfo.startDialogue}`);
 
         if (currentScene === 0) {
+
             await typing(`${sceneInfo.instructions}`);
         }
 
@@ -244,6 +250,9 @@
             enableCircleClicks = false;
             makeChoices(sceneInfo.startChoice, sceneInfo.startAnswers, sceneInfo.startId, false);
         }
+
+
+
     }
 
     function loadNextScene() {
@@ -254,20 +263,28 @@
         loadScene(currentScene);
     }
 
-    function startGame(){
+    function startGame() {
+        startMusic.currentTime = 0
         main.style.display = 'none';
         startScreen.style.display = 'block';
 
-        startButton.addEventListener('click', ()=>{
-            main.style.display = 'block';
+        activeMusic = startMusic
+        playMusic();
+
+        startButton.addEventListener('click', () => {
+            bgMusic.currentTime = 0;
+            startMusic.pause();
+            main.style.display = 'flex';
             startScreen.style.display = 'none';
             loadScene(currentScene);
-            //playMusic();
-        });
+
+            activeMusic = bgMusic
+            playMusic();
+        }, { once: true });
     }
 
     startGame();
-    
+
 
     // ----------------------------------------------------- creates dialogue choices ------------------------------------
     function makeChoices(choice, answer, id, sceneInfo) {
@@ -313,7 +330,7 @@
 
                     //--------------------------------- Add progression dialogue ---------------------------------------
                     if (sceneInfo !== false) {
-                        setTimeout(async() => {
+                        setTimeout(async () => {
                             if (objectsClicked >= sceneInfo.objects && !optionsRemaining) {
                                 if (isTyping) return;
                                 await typing(`${sceneInfo.progressionDialogue}`);
@@ -356,22 +373,62 @@
 
     async function typing(text) {
         if (isTyping) return; //prevent the typing function from running more than once at a time
-        isTyping = true;
-
+        let fullText = text;
         const p = document.createElement('p'); //add a paragraph to put the text into
-        textBox.appendChild(p);
         const speed = 30;
+        let targetElement = p;
+        const parser = document.createElement('div'); //creates a div
+        const textTokens = []; //array for tracking each part of the string
 
-        typeSound.currentTime = 0; 
+        isTyping = true;
+        skipTyping = false;
+        textBox.appendChild(p);
+        typeSound.currentTime = 0;
+        parser.innerHTML = text; //puts full string inside the div
 
-        for (let i = 0; i < text.length; i++) {
-            p.textContent += text.charAt(i);
-            //typeSound.play();
-            await wait(speed);
+
+        parser.childNodes.forEach(node => { //looks at each word in the div
+            if (node.nodeType === Node.TEXT_NODE) { //if the div just contains plain text, put it inside an empty text node and add it to the paragraph
+                const textNode = document.createTextNode("");
+                p.appendChild(textNode);
+                textTokens.push({ element: textNode, fullText: node.textContent })
+            } else if (node.nodeName === 'SPAN') { //if the div contains a span, create a span element
+                const styledSpan = document.createElement('span');
+                styledSpan.className = node.className; 
+                p.appendChild(styledSpan);
+                textTokens.push({ element: styledSpan, fullText: node.textContent })
+            }
+        })
+
+        for (const token of textTokens) {
+            if (skipTyping) { break; } // if the user clicks again in the text box the loop will end early
+            for (let i = 0; i < token.fullText.length; i++) {
+                if (skipTyping) { break; }
+
+                if (token.element.nodeType === Node.TEXT_NODE) { //checks if the target element is plain text or an html span node
+                    token.element.nodeValue += token.fullText.charAt(i) //gets character at position [i] and adds it to the screen
+                } else {
+                    token.element.textContent += token.fullText.charAt(i)
+                }
+
+                if (allowMusic === true) {
+                    typeSound.play();
+                }
+
+                await wait(speed);
+            }
         }
 
+        textTokens.forEach(token => { //if the user skips the text, displays the full string
+            if (token.element.nodeType === Node.TEXT_NODE) {
+                token.element.nodeValue = token.fullText;
+            } else {
+                token.element.textContent = token.fullText
+            }
+        })
+
         typeSound.pause();
-        typeSound.currentTime = 0; 
+        typeSound.currentTime = 0;
 
         textBox.scrollTo({
             top: textBox.scrollHeight,
@@ -381,12 +438,36 @@
         isTyping = false; //once all characters have been added turn isTyping to false
     }
 
-    function playMusic(){
+    function playMusic(music) {
         bgMusic.loop = true;
-        bgMusic.play();
+        startMusic.loop = true;
+
+        if (allowMusic === true) {
+            muteButton.className = 'fa-solid fa-volume-low';
+            if (activeMusic) {
+                activeMusic.play();
+            }
+        } else if (allowMusic === false) {
+            muteButton.className = 'fa-solid fa-volume-xmark';
+            activeMusic.pause();
+            typeSound.pause();
+        }
+
     }
 
 
+    //---------------------------- makes dialogue auto complete if you click in the text box -------------------------
+    textBox.addEventListener('click', () => {
+        console.log('click');
+        if (isTyping) {
+            skipTyping = true;
+        }
+    })
+
+    muteButton.addEventListener('click', () => {
+        allowMusic = !allowMusic;
+        playMusic();
+    })
 
 
 })();
