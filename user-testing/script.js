@@ -264,7 +264,7 @@
     }
 
     function startGame() {
-        
+        alert('Hi user tester! You are a fourth year UC Davis student from the Sacramento area; you’re aware of some of the larger effects of climate change, but have only taken minimal steps to reduce your impact on the climate. You’ve stumbled across this game, play through it and see if you can learn more about how climate change will impact your daily life. Note: the concluding scene is currently incomplete, the final version will have more dialogue.');
         startMusic.currentTime = 0
         main.style.display = 'none';
         startScreen.style.display = 'block';
