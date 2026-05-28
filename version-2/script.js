@@ -457,12 +457,12 @@
 
 
     //---------------------------- makes dialogue auto complete if you click in the text box -------------------------
-    textBox.addEventListener('click', () => {
-        console.log('click');
-        if (isTyping) {
-            skipTyping = true;
-        }
-    })
+    // textBox.addEventListener('click', () => {
+    //     console.log('click');
+    //     if (isTyping) {
+    //         skipTyping = true;
+    //     }
+    // })
 
     muteButton.addEventListener('click', () => {
         allowMusic = !allowMusic;
