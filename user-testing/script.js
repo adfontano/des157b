@@ -8,9 +8,7 @@
     let enableCircleClicks = true;
     let allOptions;
     let activeMusic = null;
-
-
-    let activeOptionExists;
+    let startDialogueTyping = false;
     let optionsRemaining = false;
 
     const background = document.querySelector('#environment');
@@ -238,7 +236,9 @@
         }
 
         // --------------------------------------------- Starting dialogue plays -------------------------------------------
+        startDialogueTyping = true;
         await typing(`${sceneInfo.startDialogue}`);
+        startDialogueTyping = false;
 
         if (currentScene === 0) {
 
@@ -458,12 +458,12 @@
 
 
     //---------------------------- makes dialogue auto complete if you click in the text box -------------------------
-    // textBox.addEventListener('click', () => {
-    //     console.log('click');
-    //     if (isTyping) {
-    //         skipTyping = true;
-    //     }
-    // })
+    textBox.addEventListener('click', () => {
+        if (isTyping && !optionsRemaining && !startDialogueTyping) {
+            skipTyping = true;
+        }
+
+    })
 
     muteButton.addEventListener('click', () => {
         allowMusic = !allowMusic;

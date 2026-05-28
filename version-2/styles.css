@@ -14,12 +14,9 @@ body {
 }
 main {
     display: block;
-    position: relative;
     height: 100vh;
     overflow: hidden;
-    width: 100vw;
-    max-width: 1600px;
-    
+    width: 100%;
 }
 #textbox {
     background-color: #070214;
@@ -36,15 +33,13 @@ main {
     right: 0;
 }
 #environment {
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: left;
-    width: 100%;
-    /* max-width: 1250px; */
+    position: relative;
     margin: 0;
     aspect-ratio: 8/5;
     max-height: calc(100vw * (8 / 5)); 
-   
 }
 .circle {
     position: absolute;
@@ -56,14 +51,11 @@ main {
     transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 3px solid #fc7323;
-    
-    
     transition: all .25s ease-in-out;
 }
 .circle:hover {
     border-width: 5px;
-    cursor: pointer;
-    
+    cursor: pointer; 
 }
 p {
     font-size: 18px;
