@@ -253,10 +253,10 @@
             'What can we do?'
         ],
         finalConvoAnswers: [
-            'Oh there are, but they require real structural change and who’s going to spring for that?',
-            'It’s not, it’s getting worse every year and the state of the environment has become irreversible.',
+            'Oh there are, but they require real structural change. Change that will require us to give up some conveniences.',
+            'It’s not, it’s getting worse every year. The state of the environment has become irreversible.',
             'They say they do, but very few have committed to making real changes. Their lives are stable enough that they aren’t motivated to fight for change.',
-            'placeholder text'
+            'We have to care enough to actually fight for change. We have to make difficult decisions and give up some of the conveniences that harm the planet. It won’t be easy, but we have to care for each other, and not just ourselves.'
         ],
     }
 
@@ -371,7 +371,8 @@
     function startGame() {
         startMusic.pause();
         bgMusic.pause();
-        activeMusic = startMusic
+        activeMusic = startMusic;
+        lighting.classList.remove('blackout')
         currentScene = 0;
         startMusic.currentTime = 0
         main.style.display = 'none';
@@ -485,7 +486,6 @@
                         const finalUl = document.querySelector('#final-convo');
                         if (finalUl.classList.contains('disabled')) {
                             setTimeout(async () => {
-                                console.log('done')
                                 await typing("<span class='reset'>Ready to head back to the present?</span>")
                                 makeResetButton('> Reset')
                                 document.querySelector('.reset-button').addEventListener('click', () => {
