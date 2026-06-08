@@ -10,6 +10,7 @@
     let activeMusic = null;
     let startDialogueTyping = false;
     let optionsRemaining = false;
+    let allowMusic = false;
 
     const background = document.querySelector('#environment');
     const textBox = document.querySelector('#textbox');
@@ -23,7 +24,6 @@
     const closeOverlay = document.querySelector('#close');
     const infoOverlay = document.querySelector('.overlay');
     const lighting = document.querySelector('#lighting');
-    let allowMusic = true;
     const bgMusic = new Audio('audio/bgMusic2.m4a');
     const startMusic = new Audio('audio/bgMusic1.m4a')
     const typeSound = new Audio('audio/fastTyping.mp3');
