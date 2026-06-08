@@ -43,9 +43,11 @@ nav ul li a{
 }
 header {
     color: #647FC6;
+    margin: 0 auto;
+    width: fit-content;
 }
 header p {
-    margin-bottom: 8px;
+    margin-bottom: 0;
 }
 div img {
     margin-bottom: 16px;
@@ -55,7 +57,7 @@ h1, h2 {
     
 }
 h1{
-    font-size: 50px;
+    font-size: 58px;
     margin-bottom: 16px;
 }
 h2{
