@@ -115,6 +115,7 @@ li:hover {
     top: 1%;
     left: 1%;
     font-size: 20px;
+    z-index: 3;
 }
 #start-screen {
     width: 100vw;
@@ -186,7 +187,7 @@ h1 {
     padding: 16px 24px 24px 16px;
     border-radius: 16px;
     top: 6%;
-    left: 65%;
+    right: 5%;
     display: flex;
     gap: 16px;
     pointer-events: none;

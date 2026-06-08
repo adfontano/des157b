@@ -277,6 +277,7 @@
             newCircles.addEventListener('click', async () => {
                 if (isTyping) return; // no clicking on things while there is already dialogue being added
                 if (!enableCircleClicks) return; // if there is current dialogue options active, no clicking
+                if(newCircles.classList.contains('disabled')) return; // if a circle has already been clicked on,do nothing
 
                 await typing(`${sceneInfo.objectDialogue[i]}`); //once an object is clicked display the dialogue attached to it
 
@@ -301,7 +302,18 @@
                             if (isTyping) return;
                             if (currentScene === 3) {
                                 finalConvo();
-                            } else if (currentScene != 3) {
+                            } else if (currentScene === 2) {
+                                if (allowMusic) { powerDown.play() }
+                                lighting.classList.add('blackout');
+                                await wait(1500);
+                                await typing(`${sceneInfo.progressionDialogue}`);
+                                if (!document.querySelector('.progression-button')) {
+                                    makeProgressionButton(sceneInfo.progressionOption);
+                                    document.querySelector('.progression-button').addEventListener('click', () => {
+                                        loadNextScene();
+                                    }, { once: true });
+                                }
+                            } else if (currentScene != 3 && currentScene != 2) {
                                 await typing(`${sceneInfo.progressionDialogue}`);
                                 makeProgressionButton(sceneInfo.progressionOption);
                                 document.querySelector('.progression-button').addEventListener('click', () => {
@@ -329,7 +341,7 @@
 
 
 
-            }, { once: true });
+            });
 
 
             // ----------------------------------------- display the circles ---------------------------------------
@@ -356,8 +368,6 @@
             makeChoices(sceneInfo.startChoice, sceneInfo.startAnswers, sceneInfo.startId, false);
         }
 
-
-
     }
 
     function loadNextScene() {
@@ -366,6 +376,7 @@
         objectsClicked = 0;
         document.querySelectorAll('.circle-clone').forEach(clone => clone.remove());
         loadScene(currentScene);
+        console.log(currentScene)
     }
 
     function startGame() {
@@ -382,16 +393,6 @@
         document.querySelectorAll('.circle-clone').forEach(clone => clone.remove());
 
         playMusic();
-
-        infoButton.addEventListener('click', () => {
-            infoOverlay.classList.toggle('active');
-
-        });
-        closeOverlay.addEventListener('click', () => {
-            infoOverlay.classList.remove('active');
-        })
-
-
 
 
         startButton.addEventListener('click', () => {
@@ -462,15 +463,15 @@
 
 
                                 } else if (currentScene === 2) {
-                                    if(allowMusic){powerDown.play()}
+                                    if (allowMusic) { powerDown.play() }
                                     lighting.classList.add('blackout');
-                                    lighting.addEventListener('animationend', async() => {
-                                        await typing(`${sceneInfo.progressionDialogue}`);
-                                        makeProgressionButton(sceneInfo.progressionOption);
-                                        document.querySelector('.progression-button').addEventListener('click', () => {
-                                            loadNextScene();
-                                        }, { once: true });
-                                    })
+                                    await wait(1500)
+                                    await typing(`${sceneInfo.progressionDialogue}`);
+                                    makeProgressionButton(sceneInfo.progressionOption);
+                                    document.querySelector('.progression-button').addEventListener('click', () => {
+                                        loadNextScene();
+                                    }, { once: true });
+
                                 } else if (currentScene != 3 && currentScene != 2) {
                                     await typing(`${sceneInfo.progressionDialogue}`);
                                     makeProgressionButton(sceneInfo.progressionOption);
@@ -542,10 +543,6 @@
         await typing('You’ve gotten a good look into the future, how are you feeling?');
         makeChoices(finalConvoInfo.finalConvoQuestions, finalConvoInfo.finalConvoAnswers, 'final-convo', false);
 
-        // if(finalUl.classList.contains('disabled')){
-        //     console.log('done')
-        //     await typing ('game over')
-        // }
     }
 
     async function typing(text) {
@@ -643,10 +640,17 @@
 
     muteButton.addEventListener('click', () => {
         allowMusic = !allowMusic;
+        console.log(allowMusic);
         playMusic();
     })
 
+    infoButton.addEventListener('click', () => {
+        infoOverlay.classList.toggle('active');
 
+    });
+    closeOverlay.addEventListener('click', () => {
+        infoOverlay.classList.remove('active');
+    })
 
 
 
