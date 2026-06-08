@@ -31,6 +31,7 @@ main {
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 3;
 }
 #environment {
     background-size: cover;
@@ -47,7 +48,7 @@ main {
     min-width: 25px;
     max-width: 35px;
     aspect-ratio: 1/1;
-    z-index: 2;
+    z-index: 3;
     transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 3px solid #fc7323;
@@ -99,7 +100,7 @@ ul {
 li {
     font-size: 18px;
     color: #fc7323;
-    z-index: 10;
+    z-index: 3;
     pointer-events: auto;
     transition: all .25s ease-in-out;
 }
@@ -123,6 +124,7 @@ li:hover {
     background-repeat: no-repeat;
     background-image: url(images/start-screen.jpg);
     position: relative;
+    z-index: 3;
 }
 #start-screen section {
     display: flex;
@@ -202,6 +204,30 @@ h1 {
 }
 .reset, .reset-button {
     color: red;
+}
+#lighting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100vw;
+    height: 100vh;
+    background-color: #070214;
+    opacity: 0;
+    transition: background-color 1s ease-in-out;
+    
+}
+.blackout {
+    animation: blackout 1.5s ease-out forwards;
+}
+@keyframes blackout {
+  0%   { opacity: 0; }
+  15%  { opacity: 0.95; } 
+  25%  { opacity: 0.1; }  
+  40%  { opacity: 0.95; } 
+  50%  { opacity: 0.3; }
+  65%  { opacity: 0.95; } 
+  100% { opacity: 0.60; } 
 }
 
 @media screen and (min-width: 1710px) {

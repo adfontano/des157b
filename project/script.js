@@ -20,12 +20,14 @@
     const main = document.querySelector('main');
     const muteButton = document.querySelector('#mute');
     const infoButton = document.querySelector('#info');
-    const closeOverlay = document.querySelector('#close')
-    const infoOverlay = document.querySelector('.overlay')
+    const closeOverlay = document.querySelector('#close');
+    const infoOverlay = document.querySelector('.overlay');
+    const lighting = document.querySelector('#lighting');
     let allowMusic = true;
     const bgMusic = new Audio('audio/bgMusic2.m4a');
     const startMusic = new Audio('audio/bgMusic1.m4a')
     const typeSound = new Audio('audio/fastTyping.mp3');
+    const powerDown = new Audio('audio/powerDown.mp3')
     typeSound.volume = 0.7;
 
     const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms)); // helps to create a pause between characters appearing in the typing function
@@ -316,7 +318,7 @@
                                 console.log('done')
                                 await typing("<span class='reset'>Ready to head back to the present?</span>")
                                 makeResetButton('> Reset')
-                                document.querySelector('.reset-button').addEventListener('click', ()=>{
+                                document.querySelector('.reset-button').addEventListener('click', () => {
                                     startGame();
                                 })
                             }, (1000));
@@ -327,7 +329,7 @@
 
 
 
-            },{once: true});
+            }, { once: true });
 
 
             // ----------------------------------------- display the circles ---------------------------------------
@@ -377,19 +379,19 @@
         textBox.innerHTML = '';
         objectsClicked = 0;
         document.querySelectorAll('.circle-clone').forEach(clone => clone.remove());
-        
+
         playMusic();
 
-        infoButton.addEventListener('click', ()=>{
+        infoButton.addEventListener('click', () => {
             infoOverlay.classList.toggle('active');
-            
+
         });
-        closeOverlay.addEventListener('click', ()=>{
+        closeOverlay.addEventListener('click', () => {
             infoOverlay.classList.remove('active');
         })
-        
-        
-        
+
+
+
 
         startButton.addEventListener('click', () => {
             bgMusic.currentTime = 0;
@@ -458,7 +460,17 @@
                                     finalConvo();
 
 
-                                } else if (currentScene != 3) {
+                                } else if (currentScene === 2) {
+                                    if(allowMusic){powerDown.play()}
+                                    lighting.classList.add('blackout');
+                                    lighting.addEventListener('animationend', async() => {
+                                        await typing(`${sceneInfo.progressionDialogue}`);
+                                        makeProgressionButton(sceneInfo.progressionOption);
+                                        document.querySelector('.progression-button').addEventListener('click', () => {
+                                            loadNextScene();
+                                        }, { once: true });
+                                    })
+                                } else if (currentScene != 3 && currentScene != 2) {
                                     await typing(`${sceneInfo.progressionDialogue}`);
                                     makeProgressionButton(sceneInfo.progressionOption);
                                     document.querySelector('.progression-button').addEventListener('click', () => {
@@ -476,7 +488,7 @@
                                 console.log('done')
                                 await typing("<span class='reset'>Ready to head back to the present?</span>")
                                 makeResetButton('> Reset')
-                                document.querySelector('.reset-button').addEventListener('click', ()=>{
+                                document.querySelector('.reset-button').addEventListener('click', () => {
                                     startGame();
                                 })
                             }, (1000));
@@ -490,7 +502,7 @@
                     option.className = 'disabled';
                     await typing(`${findAnswers[index]}`);
                     textBox.appendChild(ul);
-                    
+
                     optionsRemaining = true;
 
                 }
